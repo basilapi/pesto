@@ -1,6 +1,6 @@
 'use strict';
 
-describe('myApp.version module', function() {
+describe('pesto.version module', function() {
   beforeEach(module('myApp.version'));
 
   describe('interpolate filter', function() {

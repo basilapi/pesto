@@ -1,7 +1,7 @@
 'use strict';
 
-describe('myApp.version module', function() {
-  beforeEach(module('myApp.version'));
+describe('pesto.version module', function() {
+  beforeEach(module('pesto.version'));
 
   describe('version service', function() {
     it('should return current version', inject(function(version) {
