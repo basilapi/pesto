@@ -19,6 +19,7 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
   ;
 }])
 
+// Controllers
 .controller('MainCtrl', ['$log', '$routeParams', '$scope', 'server', 
                          function($log, $routeParams, $scope, server) {
     if(!$routeParams.tab){
@@ -28,7 +29,7 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
 	var a = $routeParams.tab.split(':');
 	$scope.tab = a[0];
 	$scope.edit = a[1] == 'edit' ? $scope.tab : false;
-	$log.info('a:', a)
+	//$log.info('a:', a)
     }
     
     $scope.title = $routeParams.id;
@@ -65,8 +66,8 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
     $scope.editable = ($scope.edit == 'spec');
     
     $scope.save = function(){
-	$log.info('endpoint', $scope.spec.endpoint);
-	$log.info('query', $scope.spec.query);
+	$log.debug('endpoint', $scope.spec.endpoint);
+	$log.debug('query', $scope.spec.query);
 	$http({
 	    method  : 'PUT',
 	    url     : server.location + '/' + $scope.spec.id + '/spec',
@@ -81,12 +82,44 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
 	   });
     }
     
-    $http.get(server.location + '/' + $routeParams.id + '/spec').success(function(o, status, headers, config){
+    $http.get(server.location + '/' + $routeParams.id + '/spec')
+    .success(function(o, status, headers, config){
 	var spec = {};
 	spec.query = o;
 	spec.id = $routeParams.id;
 	spec.endpoint = headers('X-Basil-Endpoint');
 	$scope.spec = spec;
+    });
+}])
+.controller('DocsCtrl', ['$log','$http', '$routeParams', '$scope', 'server', '$timeout', '$location',
+                         function($log, $http, $routeParams, $scope, server, $timeout, $location) {
+    $scope.editable = ($scope.edit == 'docs');
+    
+    $scope.save = function(){
+//	$log.debug('name', $scope.docs.name);
+//	$log.debug('description', $scope.docs.description);
+	$http({
+	    method  : 'PUT',
+	    url     : server.location + '/' + $scope.docs.id + '/docs',
+	    data    : $scope.docs.description,  // pass in data as strings
+	    headers : { 'X-Basil-Name': $scope.docs.name }  // set the headers so angular passing info as form data (not request payload)
+	   })
+	   .success(function(data, status, headers, config) {
+	       $log.info('success');
+	       $location.path('/basil/' + $scope.docs.id + '/docs');
+           })
+           .error(function(data, status, headers, config) {
+               $log.error(status,data);
+               $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
+	   });
+    }
+    $http.get(server.location + '/' + $routeParams.id + '/docs')
+    .success(function(o, status, headers, config){
+	var docs = {};
+	docs.description = o;
+	docs.id = $routeParams.id;
+	docs.name = headers('X-Basil-Name');
+	$scope.docs = docs;
     });
 }])
 
