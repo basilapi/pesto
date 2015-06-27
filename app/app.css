@@ -4,20 +4,20 @@
 	width: 100%;
 }
 .navbar-brand,
-.pesto-footer{
+.pesto-footer,
+h1,h2,h3,h4,h5,h6{
 	font-family: "Josefin Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-	text-align: center;
 }
-
 .pesto-toolbar{
 	text-align: center;
 	margin-bottom: 20px;
 }
 
 .pesto-footer{
-	margin: 10px 0px;
+	text-align: center;
+	margin: 30px 0px 10px;
 	padding: 10px 0px;
-	border-top: 1px solid #ccc; 
+	border-top: 1px solid #DDD; 
 }
 .navbar-inverse {
     
@@ -31,4 +31,16 @@
     font-size: 2em;
     color: green;
 }
-.nav, .pagination, .carousel, .panel-title a { cursor: pointer; }
+.nav, .pagination, .carousel, .panel-title a { 
+	cursor: pointer; 
+}
+
+.tab-content .active {
+	border-color: #DDD;
+	border-width: medium 1px 1px;
+    border-style: none solid solid;
+}
+.tab-form {
+	padding-top: 20px;
+	padding-right: 20px;
+}

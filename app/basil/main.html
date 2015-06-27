@@ -1,0 +1,11 @@
+<h1>basil:{{title}}</h1>
+<div class="pesto-posted-by">Posted by <span>user-XXX</span></div>
+<ul class="nav nav-tabs">
+  <li 
+    ng-repeat="tab in tabs" 
+    ng-class="{active:isActiveTab(tab.url)}" 
+    ng-include="'basil/tab.html'"></li>
+</ul>
+<div class="tab-content">
+<div class="tab-pane active" ng-include="currentTab"></div>
+</div>
