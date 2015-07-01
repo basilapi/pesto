@@ -9,8 +9,8 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
     controller: 'MainCtrl'
   })
   .when('/basil/:id/:tab', {
-    templateUrl: 'basil/main.html',
-    controller: 'MainCtrl'
+      templateUrl: 'basil/main.html',
+      controller: 'MainCtrl'
   })
   .when('/new', {
     templateUrl: 'basil/new.html',
@@ -20,18 +20,19 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
 }])
 
 // Controllers
-.controller('MainCtrl', ['$log', '$routeParams', '$scope', 'server', 
-                         function($log, $routeParams, $scope, server) {
+.controller('MainCtrl', ['$log', '$routeParams', '$scope', '$location', 'server', 
+                         function($log, $routeParams, $scope, $location, server) {
     if(!$routeParams.tab){
 	$scope.tab = 'spec';
-	$scope.edit = false;
+	$scope.variant = false;
     }else{
 	var a = $routeParams.tab.split(':');
 	$scope.tab = a[0];
-	$scope.edit = a[1] == 'edit' ? $scope.tab : false;
+	$scope.variant = a[1];
 	//$log.info('a:', a)
     }
     
+    $scope.id = $routeParams.id;
     $scope.title = $routeParams.id;
     $scope.tabs = [{
 	id: 'spec',
@@ -43,27 +44,31 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
         url: "basil/docs.html"
     }, {
 	id: 'views',
-        title: 'View scripts',
+        title: 'Scripts',
         url: "basil/views.html"
     }];
+
+    // If tab is addscript
+    if($scope.tab == 'addview'){
+	$scope.tabs.push({id:"addview", title:"Create a View Script", url: "basil/addview.html"});
+    }
+    
     //set current tab
     $scope.tabs.forEach(function(i){
 	if(i.id == $scope.tab){
 	    $scope.currentTab = i.url;
 	}
     });
-	//$scope.currentTab = 'basil/spec.html';
-	$scope.onClickTab = function (tab) {
-	    $scope.currentTab = tab.url;
-	};
-	$scope.isActiveTab = function(tabUrl) {
-	    return tabUrl == $scope.currentTab;
-	};
-	
+    $scope.onClickTab = function (tab) {
+	$location.path('/basil/' + $routeParams.id + '/' + tab.id);
+    };
+    $scope.isActiveTab = function(tabUrl) {
+	return tabUrl == $scope.currentTab;
+    };
 }])
 .controller('SpecCtrl', ['$log','$http', '$routeParams', '$scope', 'server', '$timeout', '$location',
-                         function($log, $http, $routeParams, $scope, server, $timeout, $location) {
-    $scope.editable = ($scope.edit == 'spec');
+    function($log, $http, $routeParams, $scope, server, $timeout, $location) {
+    $scope.editable = ($scope.variant == 'edit');
     
     $scope.save = function(){
 	$log.debug('endpoint', $scope.spec.endpoint);
@@ -93,11 +98,9 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
 }])
 .controller('DocsCtrl', ['$log','$http', '$routeParams', '$scope', 'server', '$timeout', '$location',
                          function($log, $http, $routeParams, $scope, server, $timeout, $location) {
-    $scope.editable = ($scope.edit == 'docs');
+    $scope.editable = ($scope.variant == 'edit');
     
     $scope.save = function(){
-//	$log.debug('name', $scope.docs.name);
-//	$log.debug('description', $scope.docs.description);
 	$http({
 	    method  : 'PUT',
 	    url     : server.location + '/' + $scope.docs.id + '/docs',
@@ -123,7 +126,70 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
     });
 }])
 
-.controller('NewCtrl', ['$log','$http', '$scope', function($log, $http, $scope){
-    // Show the new Api form
+.controller('ViewsCtrl', ['$log','$http', '$routeParams', '$scope', 'server', '$timeout', '$location', '$anchorScroll',
+                         function($log, $http, $routeParams, $scope, server, $timeout, $location, $anchorScroll) {
+    
+    $scope.id = $routeParams.id;
+    $scope.create = function(){
+	$location.path('/basil/' + $routeParams.id + '/addview');
+    }
+
+    $scope.save = function(view){
+	$log.info(view);
+    }
+    
+    $http.get(server.location + '/' + $routeParams.id + '/view')
+    .success(function(o, status, headers, config){
+	if(!o){
+	    $scope.views = [];
+	    return;
+	}
+	var cnt = 0;
+	o.forEach(function(i){
+	    i.editable = ($scope.variant == i.id);
+	    if(i.editable){
+		$http.get(server.location + '/' + $routeParams.id + '/view/' + i.id)
+		.success(function(d){
+		    i.template = d;
+		})
+		$location.hash('v' + cnt);
+	    }
+	    cnt++;
+	});
+	$scope.views = o;
+	$timeout(function(){$anchorScroll()}, 1);
+    });
+    
+}])
+.controller('AddviewCtrl', ['$log','$http', '$routeParams', '$scope', 'server', '$timeout', '$location', '$anchorScroll',
+                          function($log, $http, $routeParams, $scope, server, $timeout, $location, $anchorScroll) {
+     
+     $scope.view = {extension:'',engine: '',template: '','Content-Type': '', editable: true};
+     $scope.save = function(view){
+ 	$log.info(view);
+     }
+     
+ }])
+.controller('NewCtrl', ['$log','$http', '$scope', 'server', '$location', function($log, $http, $scope, server, $location){
+
+    $scope.create = function(){
+	$log.info($scope.endpoint);
+	$log.info($scope.query);
+	
+	$http({
+	    method  : 'PUT',
+	    url     : server.location + '/' ,
+	    data    : $scope.query,  // pass in data as strings
+	    headers : { 'X-Basil-Endpoint': $scope.endpoint }  // set the headers so angular passing info as form data (not request payload)
+	   })
+	   .success(function(data, status, headers, config) {
+	       var api = headers('X-Basil-Spec');
+	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
+	       $location.path('/basil/' + apiId);
+           })
+           .error(function(data, status, headers, config) {
+               $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
+	   });
+    }
 }])
 ;

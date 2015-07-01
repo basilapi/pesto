@@ -1,1 +1,8 @@
-Views
+<div ng-controller="ViewsCtrl" >
+<div class="row">
+    <span class="col-sm-2"></span>
+    <span class="col-sm-10"><p></p><p><button ng-click="create()" class="btn btn-danger">Create a view script</button></p></span>
+</div>
+
+<div ng-repeat="view in views" ng-include="'basil/view.html'"></div>
+</div>
