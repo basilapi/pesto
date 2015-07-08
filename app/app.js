@@ -7,9 +7,12 @@ angular.module('pesto', [
   'pesto.settings',
   'pesto.collection',
   'pesto.basil',
-  'pesto.version'
+  'pesto.version',
+  'pesto.user',
+  'pesto.account'
 ]).
-config(['$routeProvider', function($routeProvider) {
+config(['$routeProvider', '$httpProvider', function($routeProvider, $httpProvider) {
   $routeProvider.otherwise({redirectTo: '/collection'});
+  $httpProvider.defaults.withCredentials = true;
 }]);
 

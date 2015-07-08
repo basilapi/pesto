@@ -32,7 +32,7 @@
   <div class="form-group" ng-switch on="view.editable" >
     <label ng-switch-when="true" class="col-sm-2 control-label">Template</label>
     <div ng-switch-when="true" class="col-sm-10">
-        <textarea class="form-control code" rows="10">{{view.template}}</textarea>
+        <textarea class="form-control code" rows="10" ng-model="view.template"></textarea>
     </div>
   </div>
   

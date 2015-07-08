@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
+angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider
@@ -167,6 +167,20 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings', 'pesto.tabs'])
      $scope.view = {extension:'',engine: '',template: '','Content-Type': '', editable: true};
      $scope.save = function(view){
  	$log.info(view);
+ 	$http({
+	    method  : 'PUT',
+	    url     : server.location + '/' + $routeParams.id + '/view/' + view.extension,
+	    data    : view.template,  // pass in data as strings
+	    headers : { 'Content-Type': view.engine, 'X-Basil-Endpoint': $scope.endpoint }  // set the headers so angular passing info as form data (not request payload)
+	   })
+	   .success(function(data, status, headers, config) {
+	       var api = headers('X-Basil-Spec');
+	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
+	       $location.path('/basil/' + apiId);
+           })
+           .error(function(data, status, headers, config) {
+               $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
+	   });
      }
      
  }])
