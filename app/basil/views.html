@@ -1,8 +1,9 @@
 <div ng-controller="ViewsCtrl" >
-<div class="row">
+<div class="row" ng-if="api.createdBy == user.username">
     <span class="col-sm-2"></span>
     <span class="col-sm-10"><p></p><p><button ng-click="create()" class="btn btn-danger">Create a view script</button></p></span>
 </div>
 
-<div ng-repeat="view in views" ng-include="'basil/view.html'"></div>
+<div ng-repeat="view in views" ng-include="'basil/view.html'">&nbsp;</div>
+<div ng-if="!views.length && api.createdBy != user.username"><p class=""><span class="glyphicon glyphicon-info-sign"></span> There are no scripts.</p></div>
 </div>

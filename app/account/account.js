@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pesto.account', ['ngRoute', 'pesto.settings'])
+angular.module('pesto.account', ['ngRoute', 'pesto.settings','pesto.validators'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider
@@ -16,9 +16,9 @@ angular.module('pesto.account', ['ngRoute', 'pesto.settings'])
       templateUrl: 'account/login.html',
       controller: 'LoginCtrl'
   })
-  .when('/logout', {
-    templateUrl: 'account/logout.html',
-    controller: 'LogoutCtrl'
+  .when('/signup', {
+      templateUrl: 'account/signup.html',
+      controller: 'SignupCtrl'
   })
   ;
 }])
@@ -40,6 +40,32 @@ angular.module('pesto.account', ['ngRoute', 'pesto.settings'])
       $scope.editable = false;
       
 }])
+.controller('SignupCtrl', ['$log', '$http', '$routeParams', '$scope', '$location', 'server', 'userService', 'user',
+    function($log, $http, $routeParams, $scope, $location, server, userService, user) {
+       $scope.user = {};
+       // If logged, move to me
+       if(user.isLogged){
+ 	  $location.path('me');
+ 	  return;
+       }
+       $scope.signup = function(user, valid){
+	   console.log('called sign up');
+	   if(!valid) return;
+	   $http({
+		    method  : 'POST',
+		    url     : server.location + '/users',
+		    data    : $scope.user,  // pass in data as strings
+		   })
+		   .success(function(data, status, headers, config) {
+		       $log.info('success');
+		       $location.path('me');
+	           })
+	           .error(function(data, status, headers, config) {
+	               $log.error(status,data);
+	               $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
+		   });
+       }
+ }])
 .controller('LoginCtrl', ['$log', '$routeParams', '$scope', '$location', 'server', 'userService', 
    function($log, $routeParams, $scope, $location, server, userService) {
     if(userService.get().isLogged) {

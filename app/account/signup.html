@@ -1,32 +1,88 @@
-<form class="form-horizontal tab-form" ng-submit="login()">
-  <div class="form-group">
-    <label for="username" class="col-sm-2 control-label">Username</label>
-    <div class="col-sm-10" >
-        <input name="username" class="form-control" type="text" ng-model="username" placeholder=""/>
-    </div>
+<h1>Sign Up</h1>
+<form class="form-horizontal tab-form" ng-submit="signup(user, signupForm.$valid)" name="signupForm" novalidate>
+  <div class="form-group has-feedback"
+  ng-class="{ 'has-error': (signupForm.username.$invalid && signupForm.username.$touched)}"
+  >
+    <label for="username" class="col-sm-5 control-label">Username</label>
+    <div class="col-sm-3" >
+        <input required 
+        pattern="^[a-z0-9_\-]*$"
+        ng-minlength="3"
+        ng-maxlength="16"
+        ng-trim="true"
+        name="username" class="form-control" type="text" ng-model="user.username" placeholder=""/>
+        <div 
+           ng-show="signupForm.username.$invalid && signupForm.username.$touched" 
+           class="help-block" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span ng-show="signupForm.username.$error.required">Please specify the username.</span>
+          <span ng-show="signupForm.username.$error.pattern">The username can only include letters, digits, '_' or '-'.</span>
+          <span ng-show="signupForm.username.$error.minlength">The username cannot be shorter then 3 characters.</span>
+          <span ng-show="signupForm.username.$error.maxlength">The username cannot be longer then 16 characters.</span>
+        </div>
+      </div>
   </div>
-  <div class="form-group">
-    <label for="email" class="col-sm-2 control-label">Email</label>
-    <div class="col-sm-10" >
-        <input name="email" class="form-control" type="text" ng-model="email" placeholder=""/>
-    </div>
+  
+  <div class="form-group has-feedback"
+  ng-class="{ 'has-error': (signupForm.email.$invalid && signupForm.email.$touched)}"
+  >
+    <label for="email" class="col-sm-5 control-label">Email</label>
+    <div class="col-sm-3" >
+        <input required 
+        pattern="^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z\.]{2,6})$"
+        name="email" class="form-control" type="text" ng-model="user.email" placeholder=""/>
+        <div 
+           ng-show="signupForm.email.$invalid && signupForm.email.$touched" 
+           class="help-block" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span ng-show="signupForm.email.$error.required">Please specify the email.</span>
+          <span ng-show="signupForm.email.$error.pattern">Please enter a valid email address.</span>
+        </div>
+      </div>
   </div>
-  <div class="form-group">
-    <label for="password" class="col-sm-2 control-label">Password</label>
-    <div class="col-sm-10" >
-        <input name="password" class="form-control" type="password" ng-model="password" />
-    </div>
+  
+  <div class="form-group has-feedback"
+  ng-class="{ 'has-error': (signupForm.password.$invalid && signupForm.password.$touched)}"
+  >
+    <label for="password" class="col-sm-5 control-label">Password</label>
+    <div class="col-sm-3" >
+        <input required name="password" class="form-control" type="password" ng-model="user.password" />
+    
+        <div 
+           ng-show="signupForm.password.$invalid && signupForm.password.$touched" 
+           class="help-block" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span ng-show="signupForm.password.$error.required">Please write the password.</span>
+          <span ng-show="signupForm.password.$error.minlength">The password cannot be shorter then 8 characters.</span>
+          <span ng-show="signupForm.password.$error.maxlength">The password cannot be longer then 16 characters.</span>
+        </div>
+      </div>
   </div>
-  <div class="form-group">
-    <label for="password2" class="col-sm-2 control-label">Repeat Password</label>
-    <div class="col-sm-10" >
-        <input name="password2" class="form-control" type="password2" ng-model="password2" />
+  
+  <div class="form-group has-feedback"
+  ng-class="{ 'has-error': (signupForm.password2.$invalid && signupForm.password2.$touched)}"
+  >
+    <label for="password2" class="col-sm-5 control-label">Confirm Password</label>
+    <div class="col-sm-3" >
+        <input compare-to="user.password" required name="password2" class="form-control" type="password" ng-model="user.password2" />
+        <div 
+           ng-show="signupForm.password2.$invalid && signupForm.password2.$touched" 
+           class="help-block" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span ng-show="signupForm.password2.$error.required">Please confirm the password.</span>
+          <span ng-show="!signupForm.password2.$error.required && signupForm.password2.$error.compareTo">The passwords are not equal.</span>
+        </div>
     </div>
   </div>
   
   <div class="form-group">
-  <div class="col-sm-offset-2 col-sm-10">
-    <a href="#/signup" type="button" class="btn btn-success">Sign Up</a>
+  <div class="col-sm-offset-5 col-sm-3">
+    <button ng-disabled="signupForm.$invalid" type="submit" class="btn btn-success">Sign Up</button>
+    <a href="#/login" type="button" class="btn btn-danger">Login</a>
   </div>
   </div>
 </form>

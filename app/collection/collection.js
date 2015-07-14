@@ -9,9 +9,9 @@ angular.module('pesto.collection', ['ngRoute', 'pesto.settings'])
   });
 }])
 
-.controller('CollectionCtrl', ['$log','$http', '$scope', 'server', function($log, $http, $scope, server) {
+.controller('CollectionCtrl', ['$log','$http', '$scope', 'server', 'user', function($log, $http, $scope, server, user) {
     // Load the list of APIs and display them
-    
+    $scope.user = user;
     //$log.info('shit we are here!');
     $http.get(server.location).success(function(o){
 	$scope.list = o;

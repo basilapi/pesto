@@ -5,6 +5,8 @@
 }
 .navbar-brand,
 .pesto-footer,
+.pesto-posted-by,
+.pesto-user-menu,
 h1,h2,h3,h4,h5,h6{
 	font-family: "Josefin Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
@@ -43,4 +45,40 @@ h1,h2,h3,h4,h5,h6{
 .tab-form {
 	padding-top: 20px;
 	padding-right: 20px;
+}
+.tab-pane {
+	padding: 10px;
+}
+.pesto-view h1{
+	text-align:center;
+}
+.pesto-api-list h1{
+  display: inline-block;
+}
+.pesto-api-list .list-group-item:hover{
+  background-color: #F8F8F8;
+}
+.pesto-api-list a:hover,
+.pesto-api-list a:active,
+.pesto-api-list a:visited {
+	text-decoration: none;
+}
+.pesto-code {
+    /* padding: 2px 4px; */
+    font-size: 90%;
+    color: #C7254E;
+    background-color: #F9F2F4;
+    border-radius: 4px;
+}
+
+/* centered bootstrap tabs */
+.nav-tabs > li, .nav-pills > li {
+    float:none;
+    display:inline-block;
+    *display:inline; /* ie7 fix */
+     zoom:1; /* hasLayout ie7 trigger */
+}
+
+.nav-tabs, .nav-pills {
+    text-align:center;
 }

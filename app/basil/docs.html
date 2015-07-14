@@ -1,26 +1,50 @@
-<form class="form-horizontal tab-form" ng-controller="DocsCtrl" ng-submit="save()">
-  <div ng-repeat="message in docs.messages" ng-class="message.type" ng-model="messages"></div>
-  <div class="form-group">
+<form class="form-horizontal tab-form" ng-controller="DocsCtrl" ng-submit="save(docsForm.$valid)" novalidate name="docsForm">
+  <div class="form-group has-feedback" ng-class="{ 'has-error': (docsForm.name.$invalid &&docsForm.name.$touched) }">
     <label for="name" class="col-sm-2 control-label">Name</label>
     <div class="col-sm-10" ng-switch on="editable">
-        <input name="name" ng-switch-when="true" class="form-control" type="text" ng-model="docs.name" placeholder="My api"/>
         <pre ng-switch-when="false">{{docs.name}}</pre>
+        <div ng-switch-when="true">
+            <input 
+                required
+                name="name" class="form-control" 
+                type="text" ng-model="docs.name" placeholder="Name this API..."/>
+            <span 
+                ng-class="{ 'glyphicon-warning-sign': (docsForm.name.$invalid && docsForm.name.$touched), 'glyphicon-ok': (docsForm.name.$valid && docsForm.name.$touched) }"
+                class="glyphicon form-control-feedback" aria-hidden="true"></span>
+            <div 
+	           ng-show="docsForm.name.$invalid && docsForm.name.$touched" 
+	           class="help-block" role="alert">
+	          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	          <span class="sr-only">Error:</span>
+	          <span ng-show="docsForm.name.$error.required">Please name this API.</span>
+	          <span ng-show="docsForm.name.$error.pattern">Please specify a valid API name.</span>
+	        </div>
+        </div>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group has-feedback" ng-class="{ 'has-error': (docsForm.description.$invalid && docsForm.description.$touched) }">
     <label for="query" class="col-sm-2 control-label">Description</label>
     <div class="col-sm-10" ng-switch on="editable">
-        <textarea name="description" ng-switch-when="true" rows="10" class="form-control" ng-model="docs.description"></textarea>
         <pre ng-switch-when="false">{{docs.description}}</pre>
-    <!-- p class="help-block">Example block-level help text here.</p -->
+        
+        <div ng-switch-when="true">
+            <textarea required name="description" rows="10" class="form-control" ng-model="docs.description"></textarea>
+	        <div 
+	           ng-show="docsForm.description.$invalid && docsForm.description.$touched" 
+	           class="help-block" role="alert">
+	          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	          <span class="sr-only">Error:</span>
+	          <span ng-show="docsForm.description.$error.required" class="">Please write a short description.</span>
+	        </div>
+        </div>
     </div>
   </div>
   <div class="form-group">
   <div class="col-sm-offset-2 col-sm-10">
     <span  ng-switch on="editable">
-    <button type="submit" ng-switch-when="true" type="button" class="btn btn-success">Save</button>
+    <button ng-disabled="docsForm.$invalid"  type="submit" ng-switch-when="true" type="button" class="btn btn-success">Save</button>
     <a href="#/basil/{{docs.id}}/docs" ng-switch-when="true" type="button" class="btn btn-default">Cancel</a>
-    <a href="#/basil/{{docs.id}}/docs:edit" ng-switch-when="false" type="button" name="editable" class="btn btn-default">Edit</a>
+    <a ng-if="docs.createdBy == user.username" href="#/basil/{{docs.id}}/docs:edit" ng-switch-when="false" type="button" name="editable" class="btn btn-default">Edit</a>
     </span>
   </div>
   </div>

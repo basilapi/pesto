@@ -1,26 +1,51 @@
-<form class="form-horizontal tab-form" ng-controller="SpecCtrl" ng-submit="save()">
-  <div ng-repeat="message in spec.messages" ng-class="message.type" ng-model="messages"></div>
-  <div class="form-group">
+<form class="form-horizontal tab-form" ng-controller="SpecCtrl" ng-submit="save(specForm.$valid)" novalidate name="specForm">
+  <div class="form-group has-feedback" ng-class="{ 'has-error': (specForm.endpoint.$invalid && specForm.endpoint.$touched)}" >
     <label for="endpoint" class="col-sm-2 control-label">SPARQL Endpoint</label>
-    <div class="col-sm-10" ng-switch on="editable">
-        <input name="endpoint" ng-switch-when="true" class="form-control" type="text" ng-model="spec.endpoint" placeholder="http://dbpedia.org/sparql"/>
+    <div class="col-sm-10 controls" ng-switch on="editable">
         <pre ng-switch-when="false">{{spec.endpoint}}</pre>
+        <div ng-switch-when="true">
+        <input 
+            required
+            pattern="^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$" 
+            name="endpoint" class="form-control" type="text" 
+            ng-model="spec.endpoint" 
+            placeholder="http://dbpedia.org/sparql"/>
+        <span 
+           ng-show="specForm.endpoint.$touched"
+           ng-class="{ 'glyphicon-warning-sign': specForm.endpoint.$invalid, 'glyphicon-ok': specForm.endpoint.$valid }"
+           class="glyphicon form-control-feedback" aria-hidden="true"></span>
+        <div 
+           ng-show="specForm.endpoint.$invalid && specForm.endpoint.$touched" 
+           class="help-block" role="alert">
+		  <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+		  <span class="sr-only">Error:</span>
+		  <span ng-show="specForm.endpoint.$error.required">Please specify the SPARQL endpoint.</span>
+		  <span ng-show="specForm.endpoint.$error.pattern">Please specify a valid URL.</span>
+		</div>
+		</div>
     </div>
   </div>
-  <div class="form-group">
+  <div class="form-group" ng-class="{ 'has-error': (specForm.query.$invalid && specForm.query.$touched)}" >
     <label for="query" class="col-sm-2 control-label">Query</label>
     <div class="col-sm-10" ng-switch on="editable">
-        <textarea name="query" ng-switch-when="true" rows="10" class="form-control" ng-model="spec.query"></textarea>
-        <pre ng-switch-when="false">{{spec.query}}</pre>
-    <!-- p class="help-block">Example block-level help text here.</p -->
+        <textarea required name="query" ng-switch-when="true" rows="10" class="form-control" ng-model="spec.query"></textarea>
+        <pre class="pesto-code" ng-switch-when="false">{{spec.query}}</pre>
+        <div 
+           ng-switch-when="true" 
+           ng-show="specForm.query.$invalid && specForm.query.$touched" 
+           class="help-block" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span ng-show="specForm.query.$error.required" class="">Please write a SPARQL query.</span>
+        </div>
     </div>
   </div>
   <div class="form-group">
   <div class="col-sm-offset-2 col-sm-10">
     <span  ng-switch on="editable">
-    <button type="submit" ng-switch-when="true" type="button" class="btn btn-success">Save</button>
+    <button ng-disabled="specForm.$invalid" type="submit" ng-switch-when="true" type="button" class="btn btn-success">Save</button>
     <a href="#/basil/{{spec.id}}/spec" ng-switch-when="true" type="button" class="btn btn-default">Cancel</a>
-    <a href="#/basil/{{spec.id}}/spec:edit" ng-switch-when="false" type="button" name="editable" class="btn btn-default">Edit</a>
+    <a ng-if="user.username == spec.createdBy" href="#/basil/{{spec.id}}/spec:edit" ng-switch-when="false" type="button" name="editable" class="btn btn-default">Edit</a>
     </span>
   </div>
   </div>

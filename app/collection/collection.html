@@ -8,7 +8,7 @@
     </div>
 </div>
 
-<div  class="list-group">
+<div  class="list-group pesto-api-list">
   <div ng-repeat="api in list" class="list-group-item">
     <span class="pull-right">
       <a class="btn btn-xs btn-info" href="#/basil/{{api.id}}">
@@ -18,7 +18,7 @@
         <span class="glyphicon glyphicon-play"></span>
       </a>
     </span>
-    <h4 class="list-group-item-heading"><span class="label label-success">{{api.id}}</span> {{api.name}} <small> Created by {{api.createdBy}}</small></h4>
+    <a href="#/basil/{{api.id}}"><h4 class="list-group-item-heading"><span class="label label-success">{{api.id}}</span> {{api.name}} <small ng-if="api.createdBy"> Posted by {{api.createdBy}}</small></h4></a>
    </div>
 </div>
 

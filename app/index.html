@@ -54,7 +54,7 @@
                       <button type="submit" class="btn btn-default">Submit</button>
                     </form>
  -->
-                    <ul class="nav navbar-nav navbar-right" ng-controller="UserCtrl">
+                    <ul class="pesto-user-menu nav navbar-nav navbar-right" ng-controller="UserCtrl">
                       <li><a ng-click="action()" ><span ng-model="user.username">{{user.username}}</span></a></li>
                     </ul>
                   </div>
@@ -67,7 +67,7 @@
   <![endif]-->
 
 <div class="container" role="main">
-  <div ng-view></div>
+  <div ng-view class="pesto-view"></div>
 </div>
 
   <div class="pesto-footer">
@@ -97,6 +97,8 @@
   <script src="components/user/user.js"></script>
   <script src="components/user/user-directive.js"></script>
   <script src="components/user/interpolate-filter.js"></script>
+  
+  <script src="components/validators/validators.js"></script>
   
   <script src="components/version/version.js"></script>
   <script src="components/version/version-directive.js"></script>

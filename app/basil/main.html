@@ -1,5 +1,10 @@
-<h1>basil:{{title}}</h1>
-<div class="pesto-posted-by">Posted by <span>user-XXX</span></div>
+<h1>basil:{{api.title}}<br/>
+<small>
+<span ng-include="'basil/actions.html'"></span>
+<span class=" pesto-posted-by">Posted by <span>{{api.createdBy}}</span></span>
+</small>
+</h1>
+<br/>
 <ul class="nav nav-tabs">
   <li 
     ng-repeat="tab in tabs" 
