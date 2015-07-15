@@ -150,9 +150,9 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 	$log.debug(view);
  	$http({
 	    method  : 'PUT',
-	    url     : server.location + '/' + $routeParams.id + '/view/' + view.extension,
+	    url     : server.location + '/' + $routeParams.id + '/view/' + view.extension + '?type=' + view.type,
 	    data    : view.template,  // pass in data as strings
-	    headers : { 'Content-Type': view.engine }  // set the headers so angular passing info as form data (not request payload)
+	    headers : { 'Content-Type': view['content-type'] }  // set the headers so angular passing info as form data (not request payload)
 	   })
 	   .success(function(data, status, headers, config) {
 	       var api = headers('X-Basil-Spec');
