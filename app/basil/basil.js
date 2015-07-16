@@ -215,19 +215,19 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
     $scope.api.title = $routeParams.id;
     $scope.api.swagger = server.location + '/' + $routeParams.id + '/api-docs';
      $scope.user = user;
-     $scope.view = {extension:'',engine: '',template: '','Content-Type': '', editable: true}; // TODO Check acl
+     $scope.view = {extension:'','content-type': '',template: '', type: '', editable: true}; // TODO Check acl
      $scope.save = function(view){
  	$log.debug(view);
  	$http({
 	    method  : 'PUT',
 	    url     : server.location + '/' + $routeParams.id + '/view/' + view.extension,
 	    data    : view.template,  // pass in data as strings
-	    headers : { 'Content-Type': view.engine }  // set the headers so angular passing info as form data (not request payload)
+	    headers : { 'Content-Type': view['content-type'] }  // set the headers so angular passing info as form data (not request payload)
 	   })
 	   .success(function(data, status, headers, config) {
 	       var api = headers('X-Basil-Spec');
 	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
-	       $location.path('/basil/' + apiId);
+	       $location.path('/basil/' + apiId + '/views');
            })
            .error(function(data, status, headers, config) {
                $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
