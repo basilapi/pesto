@@ -1,49 +1,129 @@
-<form class="form-horizontal tab-form" >
+<form class="form-horizontal tab-form " novalidate ng-attr-name="{{view.editable && 'viewForm' || ''}}">
   <a name="form_{{$index}}" id="v{{$index}}"></a>
-  <div class="form-group" >
+  <div class="form-group " >
     <span class="col-sm-2"></span>
     <h4 class="col-sm-10">.{{view.id}}</h4>
   </div>
-  <div class="form-group">
+  <div 
+   class="form-group has-feedback"
+   ng-class="{ 'has-error': (viewForm.extension.$invalid && viewForm.extension.$touched)}"
+  >
     <label class="col-sm-2 control-label">Extension</label>
     <div class="col-sm-10" ng-switch on="view.editable">
         <pre ng-switch-when="false">{{view.extension}}</pre>
-        <input name="extension" ng-switch-when="true" class="form-control" type="text" ng-model="view.extension" placeholder="myview"/>
+        <div ng-switch-when="true">
+        <input 
+          required 
+          pattern="[a-z0-9_-]*"
+          name="extension"  class="form-control" type="text" 
+          ng-model="view.extension" placeholder="myview"/>
+        <span 
+           ng-show="viewForm.extension.$touched"
+           ng-class="{ 'glyphicon-warning-sign': viewForm.extension.$invalid, 'glyphicon-ok': viewForm.extension.$valid }"
+           class="glyphicon form-control-feedback" aria-hidden="true"></span>
+        <div 
+           ng-show="viewForm.extension.$invalid && viewForm.extension.$touched" 
+           class="help-block" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span ng-show="viewForm.extension.$error.required">Please specify the extension (dot excluded).</span>
+          <span ng-show="viewForm.extension.$error.pattern">Please only include letters, digits, underscores ('_') or hypens ('-').</span>
+        </div>
+        </div>
+        
     </div>
   </div>
   
-  <div class="form-group">
-    <label class="col-sm-2 control-label">Script type</label>
+  <div 
+   class="form-group has-feedback"
+   ng-class="{ 'has-error': (viewForm['content\-type'].$invalid && viewForm['content\-type'].$touched)}"
+  >
+    <label class="col-sm-2 control-label">Script Content-Type</label>
     <div class="col-sm-10" ng-switch on="view.editable">
         <pre ng-switch-when="false">{{view['content-type']}}</pre>
-        <select class="form-control" ng-model="view['content\-type']" ng-switch-when="true">
+        <div ng-switch-when="true">
+        <select required 
+        class="form-control" ng-model="view['content\-type']" name="content-type">
           <option value="template/mustache">template/mustache</option>
           <option value="application/javascript">application/javascript</option>
         </select>
+        <div class="help-block">
+          <div>
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          Please indicate the language of the script: 
+          <ul>
+            <li>JavaScript: application/javascript</li>
+            <li><a href="https://mustache.github.io/" target="_blank">Mustache</a>: template/mustache</li>
+          </ul>
+          </div>
+          <div 
+           ng-show="viewForm['content\-type'].$invalid && viewForm['content\-type'].$touched" 
+           role="alert">
+	          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+	          <span class="sr-only">Error:</span>
+	          <span ng-show="viewForm['content\-type'].$error.required">Please specify the type of script.</span>
+	          <span ng-show="viewForm['content\-type'].$error.pattern">Please specify a valid Mime-Type, eg: application/ld+json.</span>
+          </div>.
+        </div>
+        </div>
+    </div>
+  </div>
+  
+  <div class="form-group has-feedback"
+  ng-class="{ 'has-error': (viewForm.type.$invalid && viewForm.type.$touched)}"
+  >
+    <label class="col-sm-2 control-label">Returns Content-Type</label>
+    <div class="col-sm-10" ng-switch on="view.editable">
+        <pre ng-switch-when="false">{{view.type}}</pre>
+        <div ng-switch-when="true">
+        <input 
+         required
+         pattern="^[a-z0-9\-]+\/[a-z0-9\+\-]+$"
+         class="form-control" name="type" type="text" ng-model="view.type" placeholder="text/html"/>
+        <span 
+           ng-show="viewForm.type.$touched"
+           ng-class="{ 'glyphicon-warning-sign': viewForm.type.$invalid, 'glyphicon-ok': viewForm.type.$valid }"
+           class="glyphicon form-control-feedback" aria-hidden="true"></span>
+        <div 
+           ng-show="viewForm.type.$invalid && viewForm.type.$touched" 
+           class="help-block" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span ng-show="viewForm.type.$error.required">Please specify the Content-Type to be returned (eg: text/html).</span>
+          <span ng-show="viewForm.type.$error.pattern">Please specify a valid Mime-Type, eg: application/ld+json.</span>
+        </div>
+        </div>
+    </div>
+  </div>
+  
+  <div class="form-group" ng-switch on="view.editable" 
+  ng-class="{ 'has-error': (viewForm.template.$invalid && viewForm.template.$touched)}"
+  >
+    <label class="col-sm-2 control-label">Template</label>
+    <div class="col-sm-10">
+      <pre class="pesto-code"  ng-switch-when="false">{{view.template}}</pre>
+      <div  ng-switch-when="true">
+        <textarea 
+          required
+          class="form-control" name="template" rows="10" ng-model="view.template"></textarea>
+        <div 
+           ng-show="viewForm.template.$invalid && viewForm.template.$touched" 
+           class="help-block" role="alert">
+          <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+          <span class="sr-only">Error:</span>
+          <span ng-show="viewForm.template.$error.required">Write the script in the area above.</span>
+          
+        </div>
+      </div>
         
     </div>
   </div>
   
   <div class="form-group">
-    <label class="col-sm-2 control-label">Returns</label>
-    <div class="col-sm-10" ng-switch on="view.editable">
-        <pre ng-switch-when="false">{{view.type}}</pre>
-        <input ng-switch-when="true" class="form-control" type="text" ng-model="view.type" placeholder="text/html"/>
-    </div>
-  </div>
-  
-  <div class="form-group" ng-switch on="view.editable" >
-    <label class="col-sm-2 control-label">Template</label>
-    <div class="col-sm-10">
-        <textarea ng-switch-when="true" class="form-control" rows="10" ng-model="view.template"></textarea>
-        <pre class="pesto-code"  ng-switch-when="false">{{view.template}}</pre>
-    </div>
-  </div>
-  <div class="form-group">
   <div class="col-sm-offset-2 col-sm-10">
     <span ng-switch on="view.editable">
-    <button type="button" ng-click="save(view)" ng-switch-when="true" type="button" class="btn btn-success">Save</button>
-    <button type="button" ng-click="del(view)" ng-switch-when="true" type="button" class="btn btn-danger">Delete</button>
+    <button ng-disabled="viewForm.$invalid" type="button" ng-click="save(view)" ng-switch-when="true" type="button" class="btn btn-success">Save</button>
+    <button ng-show="view.id" type="button" ng-click="del(view)" ng-switch-when="true" type="button" class="btn btn-danger">Delete</button>
     <a href="#/basil/{{id}}/views" ng-switch-when="true" type="button" class="btn btn-default">Cancel</a>
     <a ng-if="api.createdBy == user.username" href="#/basil/{{id}}/views:{{view.id}}" ng-switch-when="false" type="button" name="editable" class="btn btn-default">Edit</a>
     </span>

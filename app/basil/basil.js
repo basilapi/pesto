@@ -148,6 +148,7 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 
     $scope.save = function(view){
 	$log.debug(view);
+	
  	$http({
 	    method  : 'PUT',
 	    url     : server.location + '/' + $routeParams.id + '/view/' + view.extension + '?type=' + view.type,
@@ -155,6 +156,11 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 	    headers : { 'Content-Type': view['content-type'] }  // set the headers so angular passing info as form data (not request payload)
 	   })
 	   .success(function(data, status, headers, config) {
+	       $log.debug("created",view);
+	       if(view.id != view.extension){
+		   $scope.del(view);
+		   return;
+	       }
 	       var api = headers('X-Basil-Spec');
 	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
 	       $location.path('/basil/' + apiId + '/views');
@@ -166,7 +172,7 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 
     $scope.del = function(view){
 	$log.debug(view);
- 	$http.delete(server.location + '/' + $routeParams.id + '/view/' + view.extension)
+ 	$http({ method : 'DELETE' , url : server.location + '/' + $routeParams.id + '/view/' + view.id})
 	   .success(function(data, status, headers, config) {
 	       var api = headers('X-Basil-Spec');
 	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
