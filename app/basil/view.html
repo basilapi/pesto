@@ -8,7 +8,7 @@
    class="form-group has-feedback"
    ng-class="{ 'has-error': (viewForm.extension.$invalid && viewForm.extension.$touched)}"
   >
-    <label class="col-sm-2 control-label">Extension</label>
+    <label class="col-sm-2 control-label">Script name</label>
     <div class="col-sm-10" ng-switch on="view.editable">
         <pre ng-switch-when="false">{{view.extension}}</pre>
         <div ng-switch-when="true">
@@ -17,6 +17,11 @@
           pattern="[a-z0-9_-]*"
           name="extension"  class="form-control" type="text" 
           ng-model="view.extension" placeholder="myview"/>
+        <div class="help-block">
+          <div>
+          <span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span>
+          You will use this as file extension while calling the API. Eg: <code>http://../api.scriptName</code></div>
+        </div>
         <span 
            ng-show="viewForm.extension.$touched"
            ng-class="{ 'glyphicon-warning-sign': viewForm.extension.$invalid, 'glyphicon-ok': viewForm.extension.$valid }"
