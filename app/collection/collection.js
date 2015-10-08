@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pesto.collection', ['ngRoute', 'pesto.settings'])
+angular.module('pesto.collection', ['ngRoute', 'pesto.settings','pesto.utils'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider.when('/collection', {

@@ -7,8 +7,12 @@
 .pesto-footer,
 .pesto-posted-by,
 .pesto-user-menu,
+small,
 h1,h2,h3,h4,h5,h6{
 	font-family: "Josefin Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.pesto-user-menu .glyphicon-plus {
+	color: #5CB85C;
 }
 .pesto-toolbar{
 	text-align: center;
@@ -52,8 +56,9 @@ h1,h2,h3,h4,h5,h6{
 .pesto-view h1{
 	text-align:center;
 }
-.pesto-api-list h1{
-  display: inline-block;
+
+.pesto-api-list .list-group-item-heading{
+  margin-bottom: 0px;
 }
 .pesto-api-list .list-group-item:hover{
   background-color: #F8F8F8;
@@ -84,4 +89,38 @@ h1,h2,h3,h4,h5,h6{
 }
 .help-block ul {
 	margin-bottom: 0px;
+}
+.pesto-search-form .form-group{
+	margin: 20px auto;
+}
+
+.pesto-actions{
+	margin-right: 10px;
+}
+ /* Custom, iPhone Retina */ 
+@media only screen and (min-width : 320px) {
+    
+}
+
+/* Extra Small Devices, Phones */ 
+@media only screen and (min-width : 480px) {
+	.pesto-search-form .form-group{width:80%}
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width : 768px) {
+	.pesto-search-form .form-group{width:60%}
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width : 992px) {
+	.pesto-search-form .form-group{width:60%}
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width : 1200px) {
+	.pesto-search-form .form-group{width:40%}
+}
+.highlight{
+	background-color: #5CB85C;
 }

@@ -1,16 +1,9 @@
-<div class="row">
-    <div class="col-lg-12">
-      <div class="pesto-toolbar">
-          <div class="btn-group">
-            <a class="btn btn-xl btn-danger" href="#/new"><span class="glyphicon glyphicon-leaf"></span></a>
-          </div>
-       </div>
-    </div>
-</div>
+
+<span ng-controller="SearchCtrl" ng-include="'search/input.html'"></span>
 
 <div  class="list-group pesto-api-list">
   <div ng-repeat="api in list" class="list-group-item">
-    <span class="pull-right">
+    <span class="pull-left pesto-actions">
       <a class="btn btn-xs btn-info" href="#/basil/{{api.id}}">
         <span class="glyphicon glyphicon-wrench"></span>
       </a>
@@ -18,11 +11,17 @@
         <span class="glyphicon glyphicon-play"></span>
       </a>
     </span>
-    <a href="#/basil/{{api.id}}"><h4 class="list-group-item-heading"><span class="label label-success">{{api.id}}</span> {{api.name}} <small ng-if="api.createdBy"> Posted by {{api.createdBy}}</small></h4></a>
+    <h3 class="list-group-item-heading">
+    	<a href="#/basil/{{api.id}}"><span ng-if="!api.name">{{api.id}}</span> {{api.name}}</a>  
+	    <span class="pull-right">
+	    <small ng-if="api.createdBy"> Posted by {{api.createdBy}}</small>
+	    <small ng-if="api.modified != 0"> | Modified <span time-diff="api.modified"></span></small>
+	    </span>
+    </h3>
    </div>
 </div>
 
-<div class="row">
+<!-- <div class="row">
     <div class="col-lg-12">
       <div class="pesto-toolbar">
           <div class="btn-group">
@@ -30,4 +29,4 @@
           </div>
        </div>
     </div>
-</div>
+</div> -->

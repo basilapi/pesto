@@ -1,0 +1,16 @@
+<div class="row">
+	<div class="col-lg-12" >
+		<form class="pesto-search-form" ng-submit="search()">
+			<div class="form-group">
+				<div class="input-group">
+					<input class="form-control" type="search" value="{{query.text}}"
+						name="query.text" ng-model="query.text"
+						placeholder="type your query here..." /> <span
+						class="input-group-btn">
+						<a href="#/search/{{query.text}}" class="btn btn-success" type="button"><span class="glyphicon glyphicon-search"></span></a>
+					</span>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

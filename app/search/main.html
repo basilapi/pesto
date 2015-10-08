@@ -1,0 +1,30 @@
+<span ng-include="'search/input.html'"></span>
+
+<div class="list-group pesto-search-list">
+	<div ng-repeat="api in list" class="list-group-item">
+		<span class="pull-left pesto-actions">
+	      <a class="btn btn-xs btn-info" href="#/basil/{{api.id}}">
+	        <span class="glyphicon glyphicon-wrench"></span>
+	      </a>
+	      <a class="btn btn-xs btn-warning" href="{{api.location}}/api-docs">
+	        <span class="glyphicon glyphicon-play"></span>
+	      </a>
+	    </span>
+	    <h3 class="list-group-item-heading">
+	    	<a href="#/basil/{{api.id}}"><span ng-if="!api.name">{{api.id}}</span> {{api.name}}</a>  
+		    <span class="pull-right">
+		    <small ng-if="api.createdBy"> Posted by {{api.createdBy}}</small>
+		    <small ng-if="api.modified != 0"> | Modified <span time-diff="api.modified"></span></small>
+		    </span>
+	    </h3>
+
+		<div class="" ng-if="api.context">
+			<p class="list-group-item-text" ng-repeat="ctx in api.context">
+				<span ng-if="ctx['spec:endpoint']">Endpoint:</span>
+				<span ng-if="ctx['spec:query']">Query:</span>
+				<code ng-if="ctx['spec:endpoint']" highlight="ctx['spec:endpoint']"></code>
+				<code ng-if="ctx['spec:query']" highlight="ctx['spec:query']"></code>
+			</p>
+		</div>
+	</div>
+</div>

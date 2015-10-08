@@ -49,7 +49,7 @@ angular.module('pesto.account', ['ngRoute', 'pesto.settings','pesto.validators']
  	  return;
        }
        $scope.signup = function(user, valid){
-	   console.log('called sign up');
+	   $log.debug('called sign up');
 	   if(!valid) return;
 	   $http({
 		    method  : 'POST',

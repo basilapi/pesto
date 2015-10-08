@@ -102,5 +102,8 @@ angular.module('pesto.user', [
     $scope.action = function(){
 	$scope.user.isLogged ? $location.path('me') : $location.path('login');
     }
+    $scope.plus = function(){
+	$scope.user.isLogged ? $location.path('new') : $location.path('login');
+    }
 }]);
 ;

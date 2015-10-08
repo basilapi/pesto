@@ -1,15 +1,16 @@
 {
   "name": "pesto",
   "description": "A UI for Basil",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/the-open-university/pesto",
   "license": "Apache 2.0",
   "private": true,
   "dependencies": {
-    "angular": "~1.4.0",
-    "angular-route": "~1.4.0",
-    "angular-loader": "~1.4.0",
-    "angular-mocks": "~1.4.0",
+    "angular": "~1.4.7",
+    "angular-route": "~1.4.7",
+    "angular-sanitize": "~1.4.7",
+    "angular-loader": "~1.4.7",
+    "angular-mocks": "~1.4.7",
     "html5-boilerplate": "~5.2.0"
   }
 }
