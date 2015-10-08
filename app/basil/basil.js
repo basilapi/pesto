@@ -17,8 +17,12 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
       controller: 'NewCtrl'
   })
   .when('/clone/:id', {
-    templateUrl: 'basil/clone.html',
-    controller: 'CloneCtrl'
+      templateUrl: 'basil/clone.html',
+      controller: 'CloneCtrl'
+    })
+  .when('/delete/:id', {
+    templateUrl: 'basil/delete.html',
+    controller: 'DeleteCtrl'
   })
   ;
 }])
@@ -218,7 +222,6 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 .controller('AddviewCtrl', ['$log','$http', '$routeParams', '$scope', 'server', '$timeout', '$location', '$anchorScroll', 'user',
                           function($log, $http, $routeParams, $scope, server, $timeout, $location, $anchorScroll, user) {
     $scope.api.id = $routeParams.id;
-    $scope.api.title = headers('X-Basil-Name') || $routeParams.id;
     $scope.api.swagger = server.location + '/' + $routeParams.id + '/api-docs';
      $scope.user = user;
      $scope.view = {extension:'','content-type': '',template: '', type: '', editable: true}; // TODO Check acl
@@ -239,7 +242,14 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
                $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
 	   });
      }
-     
+     ;
+     // We reload basic info
+     $http.get(server.location + '/' + $routeParams.id + '/view')
+     .success(function(o, status, headers, config){
+ 	$scope.api.createdBy = headers('X-Basil-Creator');
+ 	$scope.api.swagger = headers('X-Basil-Swagger');
+ 	$scope.api.title = headers('X-Basil-Name') || $routeParams.id ;
+     });
  }])
  .controller('NewCtrl', ['$log','$http', '$scope', 'server', '$location', 'user', function($log, $http, $scope, server, $location, user){
 
@@ -289,6 +299,27 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
  	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
  	       $location.path('/basil/' + apiId);
             });
+     }
+ }])
+ 
+ .controller('DeleteCtrl', ['$log','$http', '$scope', 'server', '$location', 'user', '$routeParams', function($log, $http, $scope, server, $location, user, $routeParams){
+     $scope.api = {};
+     $scope.api.id = $routeParams.id;
+    
+     // if user is not logged in, redirect to login
+     if(!user.isLogged){
+ 	$location.path('/login');
+ 	return;
+     }
+     
+     $scope.undo = function(valid){
+	 $location.path('/basil/'+$routeParams.id)
+     };
+     $scope.del = function(){
+	 $http({ method : 'DELETE' , url : server.location + '/' + $routeParams.id})
+	   .success(function(data, status, headers, config) {
+		$location.path('/');
+	});
      }
  }])
 ;
