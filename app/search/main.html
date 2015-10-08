@@ -22,8 +22,12 @@
 			<p class="list-group-item-text" ng-repeat="ctx in api.context">
 				<span ng-if="ctx['spec:endpoint']">Endpoint:</span>
 				<span ng-if="ctx['spec:query']">Query:</span>
+				<span ng-if="ctx['doc:name']">Name:</span>
+				<span ng-if="ctx['doc:description']">Description:</span>
 				<code ng-if="ctx['spec:endpoint']" highlight="ctx['spec:endpoint']"></code>
 				<code ng-if="ctx['spec:query']" highlight="ctx['spec:query']"></code>
+				<code ng-if="ctx['doc:name']" highlight="ctx['doc:name']"></code>
+				<code ng-if="ctx['doc:description']" highlight="ctx['doc:description']"></code>
 			</p>
 		</div>
 	</div>
