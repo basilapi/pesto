@@ -1,8 +1,6 @@
 /* basil css stylesheet */
 
-.navbar-brand{
-	width: 100%;
-}
+
 .navbar-brand,
 .pesto-footer,
 .pesto-posted-by,
@@ -11,8 +9,14 @@ small,
 h1,h2,h3,h4,h5,h6{
 	font-family: "Josefin Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
-.pesto-user-menu .glyphicon-plus {
-	color: #5CB85C;
+h2,
+.pesto-user-menu .glyphicon-leaf {
+	color: green;
+}
+.pesto-clone-buttons{
+	display:block;
+	margin:auto;
+	text-align:center;
 }
 .pesto-toolbar{
 	text-align: center;
@@ -53,7 +57,7 @@ h1,h2,h3,h4,h5,h6{
 .tab-pane {
 	padding: 10px;
 }
-.pesto-view h1{
+.pesto-view h2{
 	text-align:center;
 }
 
@@ -81,7 +85,7 @@ h1,h2,h3,h4,h5,h6{
     float:none;
     display:inline-block;
     *display:inline; /* ie7 fix */
-     zoom:1; /* hasLayout ie7 trigger */
+    zoom:1; /* hasLayout ie7 trigger */
 }
 
 .nav-tabs, .nav-pills {
@@ -97,6 +101,8 @@ h1,h2,h3,h4,h5,h6{
 .pesto-actions{
 	margin-right: 10px;
 }
+
+.alert{width:50%;margin:5px auto;padding:5px;cursor:default}
  /* Custom, iPhone Retina */ 
 @media only screen and (min-width : 320px) {
     
@@ -105,21 +111,25 @@ h1,h2,h3,h4,h5,h6{
 /* Extra Small Devices, Phones */ 
 @media only screen and (min-width : 480px) {
 	.pesto-search-form .form-group{width:80%}
+	.alert{width:50%;}
 }
 
 /* Small Devices, Tablets */
 @media only screen and (min-width : 768px) {
 	.pesto-search-form .form-group{width:60%}
+	.alert{width:50%;}
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width : 992px) {
 	.pesto-search-form .form-group{width:60%}
+	.alert{width:40%;}
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width : 1200px) {
 	.pesto-search-form .form-group{width:40%}
+	.alert{width:40%;}
 }
 .highlight{
 	background-color: #5CB85C;

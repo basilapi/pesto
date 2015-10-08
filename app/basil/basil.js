@@ -13,8 +13,12 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
       controller: 'MainCtrl'
   })
   .when('/new', {
-    templateUrl: 'basil/new.html',
-    controller: 'NewCtrl'
+      templateUrl: 'basil/new.html',
+      controller: 'NewCtrl'
+  })
+  .when('/clone/:id', {
+    templateUrl: 'basil/clone.html',
+    controller: 'CloneCtrl'
   })
   ;
 }])
@@ -75,8 +79,8 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 	if(!valid){
 	    return;
 	}
-	$log.debug('endpoint', $scope.spec.endpoint);
-	$log.debug('query', $scope.spec.query);
+//	$log.debug('endpoint', $scope.spec.endpoint);
+//	$log.debug('query', $scope.spec.query);
 	$http({
 	    method  : 'PUT',
 	    url     : server.location + '/' + $scope.spec.id + '/spec',
@@ -100,6 +104,7 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 	spec.createdBy = headers('X-Basil-Creator');
 	$scope.api.swagger = headers('X-Basil-Swagger');
 	$scope.api.createdBy = spec.createdBy;
+	$scope.api.title = headers('X-Basil-Name') || $scope.api.title;
 	$scope.spec = spec;
 	
 	$scope.editable = ($scope.variant == 'edit' && $scope.user.username == $scope.api.createdBy);
@@ -134,6 +139,7 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 	$scope.api.swagger = headers('X-Basil-Swagger');
 	docs.createdBy = $scope.api.createdBy = headers('X-Basil-Creator');
 	$scope.docs = docs;
+	$scope.api.title = docs.name;
 	$scope.editable = ($scope.variant == 'edit' && $scope.user.username == $scope.api.createdBy);
     });
 }])
@@ -187,7 +193,7 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
     .success(function(o, status, headers, config){
 	$scope.api.createdBy = headers('X-Basil-Creator');
 	$scope.api.swagger = headers('X-Basil-Swagger');
-	
+	$scope.api.title = headers('X-Basil-Name') || $routeParams.id ;
 	if(!o){
 	    $scope.views = [];
 	    return;
@@ -212,7 +218,7 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 .controller('AddviewCtrl', ['$log','$http', '$routeParams', '$scope', 'server', '$timeout', '$location', '$anchorScroll', 'user',
                           function($log, $http, $routeParams, $scope, server, $timeout, $location, $anchorScroll, user) {
     $scope.api.id = $routeParams.id;
-    $scope.api.title = $routeParams.id;
+    $scope.api.title = headers('X-Basil-Name') || $routeParams.id;
     $scope.api.swagger = server.location + '/' + $routeParams.id + '/api-docs';
      $scope.user = user;
      $scope.view = {extension:'','content-type': '',template: '', type: '', editable: true}; // TODO Check acl
@@ -235,29 +241,54 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
      }
      
  }])
-.controller('NewCtrl', ['$log','$http', '$scope', 'server', '$location', 'user', function($log, $http, $scope, server, $location, user){
+ .controller('NewCtrl', ['$log','$http', '$scope', 'server', '$location', 'user', function($log, $http, $scope, server, $location, user){
 
-    // if user is not logged in, redirect to login
-    if(!user.isLogged){
-	$location.path('/login');
-	return;
-    }
-    $scope.create = function(valid){
-	if(!valid) return;
-	$http({
-	    method  : 'PUT',
-	    url     : server.location + '/' ,
-	    data    : $scope.query,  // pass in data as strings
-	    headers : { 'X-Basil-Endpoint': $scope.endpoint }  // set the headers so angular passing info as form data (not request payload)
-	   })
-	   .success(function(data, status, headers, config) {
-	       var api = headers('X-Basil-Spec');
-	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
-	       $location.path('/basil/' + apiId);
-           })
-           .error(function(data, status, headers, config) {
-               $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
-	   });
-    }
-}])
+     // if user is not logged in, redirect to login
+     if(!user.isLogged){
+ 	$location.path('/login');
+ 	return;
+     }
+     $scope.create = function(valid){
+ 	if(!valid) return;
+ 	$http({
+ 	    method  : 'PUT',
+ 	    url     : server.location + '/' ,
+ 	    data    : $scope.query,  // pass in data as strings
+ 	    headers : { 'X-Basil-Endpoint': $scope.endpoint }  // set the headers so angular passing info as form data (not request payload)
+ 	   })
+ 	   .success(function(data, status, headers, config) {
+ 	       var api = headers('X-Basil-Spec');
+ 	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
+ 	       $location.path('/basil/' + apiId);
+            })
+            .error(function(data, status, headers, config) {
+                $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
+ 	   });
+     }
+ }])
+ .controller('CloneCtrl', ['$log','$http', '$scope', 'server', '$location', 'user', '$routeParams', function($log, $http, $scope, server, $location, user, $routeParams){
+     $scope.api = {};
+     $scope.api.id = $routeParams.id;
+    
+     // if user is not logged in, redirect to login
+     if(!user.isLogged){
+ 	$location.path('/login');
+ 	return;
+     }
+     
+     $scope.undo = function(valid){
+	 $location.path('/basil/'+$routeParams.id)
+     };
+     $scope.clone = function(){
+ 	$http({
+ 	    method  : 'GET',
+ 	    url     : server.location + '/' + $routeParams.id + "/clone"
+ 	   })
+ 	   .success(function(data, status, headers, config) {
+ 	       var api = headers('X-Basil-Spec');
+ 	       var apiId = api.replace(/.*?\/([^\/]+)\/spec$/,'$1');
+ 	       $location.path('/basil/' + apiId);
+            });
+     }
+ }])
 ;

@@ -1,9 +1,10 @@
-<h1>basil:{{api.title}}<br/>
+<h2>{{api.title}}<br/>
+<small ng-if="api.title != api.id">basil:{{api.id}}</small><br/>
 <small>
 <span ng-include="'basil/actions.html'"></span>
 <span class=" pesto-posted-by">Posted by <span>{{api.createdBy}}</span></span>
 </small>
-</h1>
+</h2>
 <br/>
 <ul class="nav nav-tabs">
   <li 

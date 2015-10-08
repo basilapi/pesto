@@ -13,7 +13,9 @@ angular.module('pesto.collection', ['ngRoute', 'pesto.settings','pesto.utils'])
     // Load the list of APIs and display them
     $scope.user = user;
     //$log.info('shit we are here!');
-    $http.get(server.location).success(function(o){
+    $http.get(server.location)
+    .success(function(o){
 	$scope.list = o;
-    });
+    })
+    ;
 }]);

@@ -6,6 +6,8 @@ angular.module('pesto', [
   'ngSanitize', // unused
   'ui.bootstrap',
   'pesto.settings',
+  'pesto.utils',
+  'pesto.error',
   'pesto.collection',
   'pesto.basil',
   'pesto.search',

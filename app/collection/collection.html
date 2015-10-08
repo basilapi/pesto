@@ -1,4 +1,3 @@
-
 <span ng-controller="SearchCtrl" ng-include="'search/input.html'"></span>
 
 <div  class="list-group pesto-api-list">
@@ -6,6 +5,9 @@
     <span class="pull-left pesto-actions">
       <a class="btn btn-xs btn-info" href="#/basil/{{api.id}}">
         <span class="glyphicon glyphicon-wrench"></span>
+      </a>
+      <a class="btn btn-xs btn-danger" href="#/clone/{{api.id}}">
+        <span class="glyphicon glyphicon-duplicate"></span>
       </a>
       <a class="btn btn-xs btn-warning" href="{{api.location}}/api-docs">
         <span class="glyphicon glyphicon-play"></span>
