@@ -2,10 +2,11 @@
       <a target="_blank" class="btn btn-xs btn-warning" href="{{api.swagger}}">
         <span class="glyphicon glyphicon-play"></span>
       </a>
+      <a class="pesto-twitter-share btn btn-xs" target="_basiltwit" href="https://twitter.com/intent/tweet?text=Checkout%20this%20API%3A%20%22{{api.title}}%22%20http%3A%2F%2Fbasil.kmi.open.ac.uk%2Fapp%2F%23%2Fbasil%2F{{api.id}}%20%40basilapi&hashtags=SPARQL,API"></a>
       <a class="btn btn-xs btn-success" href="#/clone/{{api.id}}">
         <span class="glyphicon glyphicon-duplicate"></span>
       </a>
-      <a class="btn btn-xs btn-danger" href="#/delete/{{api.id}}">
+      <a ng-if="api.createdBy == user.username" class="btn btn-xs btn-danger" href="#/delete/{{api.id}}">
         <span class="glyphicon glyphicon-remove"></span>
       </a>
 </span>

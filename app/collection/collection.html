@@ -13,12 +13,12 @@
         <span class="glyphicon glyphicon-play"></span>
       </a>
     </span>
+    <span class="pull-right pesto-info">
+	    <span ng-if="api.createdBy"> Posted by {{api.createdBy}}</span>
+	    <span ng-if="api.modified != 0"> | Modified <span time-diff="api.modified"></span></span>
+	</span>
     <h3 class="list-group-item-heading">
     	<a href="#/basil/{{api.id}}"><span ng-if="!api.name">{{api.id}}</span> {{api.name}}</a>  
-	    <span class="pull-right">
-	    <small ng-if="api.createdBy"> Posted by {{api.createdBy}}</small>
-	    <small ng-if="api.modified != 0"> | Modified <span time-diff="api.modified"></span></small>
-	    </span>
     </h3>
    </div>
 </div>

@@ -13,14 +13,18 @@
   <link rel="stylesheet" href="bower_components/html5-boilerplate/dist/css/main.css">
   <link href="//fonts.googleapis.com/css?family=Josefin+Sans:400,300" rel='stylesheet' type='text/css'>
   <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
   <link rel="stylesheet" href="app.css">
+  
+  <!-- Twitter -->
+  <link rel="me" href="https://twitter.com/basilapi"></link>
   <script src="bower_components/html5-boilerplate/dist/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body>
               <nav class="navbar  navbar-default">
                 <div class="container-fluid">
                   <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-2">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="pesto-navbar-right">
                       <span class="sr-only">Toggle navigation</span>
                       <span class="icon-bar"></span>
                       <span class="icon-bar"></span>
@@ -46,12 +50,12 @@
                         </ul>
                       </li> 
                     </ul>-->
-
+					<div class="collapse navbar-collapse" id="pesto-navbar-right">
                     <ul class="pesto-user-menu nav navbar-nav navbar-right" ng-controller="UserCtrl">
-                      <li><a title="Seed a query..." ng-click="plus()" ><span class="glyphicon glyphicon-leaf"></span></a></li>
+                      <li class="pesto-seed"><a title="Seed a query..." ng-click="plus()"><span class="glyphicon glyphicon-plus"></span> Seed</a></li>
                       <li><a ng-click="action()" ><span ng-model="user.username">{{user.username}}</span></a></li>
                     </ul>
-                    
+                    </div>
                   </div>
 
               </nav>

@@ -37,7 +37,6 @@ angular.module('pesto.basil', ['ngRoute', 'pesto.settings'])
 	var a = $routeParams.tab.split(':');
 	$scope.tab = a[0];
 	$scope.variant = a[1];
-	//$log.info('a:', a)
     }
     $scope.user = user;
     $scope.api = {};
