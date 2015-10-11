@@ -11,7 +11,7 @@ h1,h2,h3,h4,h5,h6{
 	font-family: "Josefin Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 h2,
-.pesto-user-menu li.pesto-seed *{
+.pesto-user-menu li.pesto-seed * {
 	color: green;
 }
 .pesto-clone-buttons{
