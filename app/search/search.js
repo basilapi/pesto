@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('pesto.search', ['ngRoute', 'pesto.settings'])
+angular.module('pesto.search', ['ngRoute', 'pesto.settings','pesto.utils'])
 
 .config(['$routeProvider', function($routeProvider) {
   $routeProvider
@@ -17,8 +17,10 @@ angular.module('pesto.search', ['ngRoute', 'pesto.settings'])
     function($log, $http, $routeParams, $scope, server, $timeout, $location) {
 
     $scope.query = {text: $routeParams.text};
-    $scope.search = function(){
-	$location.path('search/'+$scope.query.text);
+    $scope.search = function(valid){
+    	if(valid){
+    		$location.path('search/'+$scope.query.text);
+    	}
     };
     
     if(!$scope.query.text) return;
@@ -40,21 +42,20 @@ angular.module('pesto.search', ['ngRoute', 'pesto.settings'])
            $scope.messages = [{'type':'alert-danger', 'message':headers('X-Basil-Error')}];
        });
 }])
-.directive('highlight', function($compile) {
+.directive('highlight', function($compile, regex) {
     return {link: function(scope,element,attr){
-	var text = scope.$parent.$parent.$parent.query.text;
-	var tar = text.split(' ');
-	var val = eval('scope.'+attr['highlight']);
-	val = val .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-		.replace(/"/g, "&quot;").replace(/'/g, "&#039;");
-	for(var x in tar){
-	    val=val.replace(tar[x], '%%%' + tar[x] + '%%%');
-	}
-	for(var x in tar){
-	    val=val.replace('%%%' + tar[x] + '%%%', '<span class="highlight">' + tar[x] + '</span>');
-	}
-	element.append(val);
-    }}
+			var text = scope.$parent.$parent.$parent.query.text;
+			var tar = text.split(' ');
+			var val = eval('scope.'+attr['highlight']);
+			val = val .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+				.replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+			for(var x in tar){
+				var preg = new RegExp('('+regex.escape(tar[x])+')', 'gi');
+			    val = val.replace(preg,  '<span class="highlight">$1</span>');
+			}
+			element.append(val);
+	    }
+    }
 })
 
 ;
